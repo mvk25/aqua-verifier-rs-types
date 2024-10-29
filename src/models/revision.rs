@@ -6,6 +6,9 @@ use crate::models::content;
 use crate::models::metadata;
 use crate::models::signature;
 use crate::models::witness;
+use crate::models::hash::Hash;
+use crate::models::signature::RevisionSignature;
+use crate::models::witness::RevisionWitness;
 
 // import! {
 //     content::{RevisionContent, FileContent};
@@ -22,6 +25,15 @@ pub struct Revision {
     pub signature: Option<signature::RevisionSignature>,
     pub witness: Option<witness::RevisionWitness>,
 }
+
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
+pub struct RevisionReference {
+    pub reference_hash: Hash,
+    pub verification_hash: Hash,
+    pub signature: Option<RevisionSignature>,
+    pub witness: Option<RevisionWitness>,
+}
+
 
 #[test]
 fn parse_revision_future() {
