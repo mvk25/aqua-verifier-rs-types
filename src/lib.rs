@@ -13,6 +13,9 @@ mod models {
     pub mod tx_hash;
     pub mod page_data;
     pub mod revision;
+
+    // Tests
+    pub mod tests;
 }
 
 pub mod crypt {

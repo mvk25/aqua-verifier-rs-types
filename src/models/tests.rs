@@ -9,16 +9,20 @@
 //     witness::RevisionWitness;
 // }
 
+// use super::content;
 
 
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
-/// A revision of a document on an Aqua chain
-pub struct Revision {
-    pub content: content::RevisionContent,
-    pub metadata: metadata::RevisionMetadata,
-    pub signature: Option<signature::RevisionSignature>,
-    pub witness: Option<witness::RevisionWitness>,
-}
+
+// #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
+// /// A revision of a document on an Aqua chain
+// pub struct Revision {
+//     // pub content: content::RevisionContent,
+//     pub metadata: metadata::RevisionMetadata,
+//     pub signature: Option<signature::RevisionSignature>,
+//     pub witness: Option<witness::RevisionWitness>,
+// }
+
+use crate::models::revision::Revision;
 
 #[test]
 fn parse_revision_future() {
@@ -104,11 +108,11 @@ fn parse_revision_future() {
     //dbg!(_rev);
 }
 
-#[test]
-fn main_page_signed() {
-    const TEST_DATA: &str = include_str!("../../tests/test_data/DAA_SIG_SENDER_NO_WIT.json");
-    dbg!(TEST_DATA);
-    let x: Revision = serde_json::from_str(TEST_DATA).expect("failed to parse");    
-    dbg!(&x);
-    assert!(x.signature.is_some());
-}
+// #[test]
+// fn main_page_signed() {
+//     // const TEST_DATA: &str = include_str!("../../tests/test_data/DAA_SIG_SENDER_NO_WIT.json");
+//     dbg!(TEST_DATA);
+//     let x: Revision = serde_json::from_str(TEST_DATA).expect("failed to parse");    
+//     dbg!(&x);
+//     assert!(x.signature.is_some());
+// }

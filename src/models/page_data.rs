@@ -1,4 +1,4 @@
-use super::hash::Hash;
+use crate::models::hash::Hash;
 use crate::models::revision::Revision;
 use serde::{Deserialize, Serialize};
 // use serde_with::serde_as;
