@@ -1,4 +1,6 @@
-use super::super::{hash::Hash, tx_hash::TxHash};
+
+use crate::models::hash::Hash;
+use crate::models::tx_hash::TxHash;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 /// Contains the information stored on the blockchain

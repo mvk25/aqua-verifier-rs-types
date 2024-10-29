@@ -1,9 +1,11 @@
+use super::stack_str::{from_hex, StackStr};
+
 #[derive(Hash, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 /// A transaction hash
 pub struct TxHash([u8; 32]);
 
 impl TxHash {
-    pub fn to_stackstr(self) -> super::StackStr<66> {
+    pub fn to_stackstr(self) -> StackStr<66> {
         let mut data = [0u8; 2 + 32 * 2];
         data[0] = b'0';
         data[1] = b'x';
@@ -11,7 +13,7 @@ impl TxHash {
         unsafe {
             hex::encode_to_slice(self.0, &mut data[2..]).unwrap_unchecked();
         }
-        super::StackStr(data)
+        StackStr::new(data)
     }
 }
 
@@ -24,7 +26,7 @@ impl std::str::FromStr for TxHash {
             return Err(());
         }
         let s = s.strip_prefix("0x").ok_or(())?;
-        Ok(TxHash(super::from_hex(s).ok_or(())?))
+        Ok(TxHash(from_hex(s).ok_or(())?))
     }
 }
 

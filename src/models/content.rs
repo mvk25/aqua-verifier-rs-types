@@ -1,5 +1,6 @@
-use super::super::{base64::Base64, hash::Hash};
 use std::collections::BTreeMap;
+use crate::models::hash::Hash;
+use crate::models::base64::Base64;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 /// The user visible content

@@ -1,4 +1,26 @@
-pub mod  custom_types;
+// pub mod models;
+
+mod models {
+    pub mod content;
+    pub mod hash;
+    pub mod metadata;
+    pub mod signature;
+    pub mod witness;
+    pub mod base64;
+    pub mod stack_str;
+    pub mod timestamp;
+    pub mod public_key;
+    pub mod tx_hash;
+    pub mod page_data;
+    pub mod revision;
+}
+
+pub mod crypt {
+    pub type Hasher = sha3::Sha3_512;
+    pub type Hash = sha3::digest::Output<Hasher>;
+    pub use sha3::*;
+}
+
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right

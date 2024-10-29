@@ -1,4 +1,10 @@
+use sha3::Digest;
 use std::ops::Deref;
+
+use crate::{
+    crypt,
+    models::stack_str::{from_hex, StackStr},
+};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 /// Used to represent a sp256k1 public key
@@ -11,7 +17,7 @@ impl std::fmt::Debug for PublicKey {
 }
 
 impl PublicKey {
-    pub fn to_stackstr(self) -> super::StackStr<{ 2 + 2 * 65 }> {
+    pub fn to_stackstr(self) -> StackStr<{ 2 + 2 * 65 }> {
         let mut s = [0u8; 2 + 2 * 65];
         s[0] = b'0';
         s[1] = b'x';
@@ -20,7 +26,7 @@ impl PublicKey {
         unsafe {
             hex::encode_to_slice(arr, &mut s[2..]).unwrap_unchecked();
         }
-        super::StackStr(s)
+        StackStr::new(s)
     }
 }
 
@@ -37,7 +43,7 @@ impl From<PublicKey> for [u8; 65] {
 }
 impl From<PublicKey> for ethaddr::Address {
     fn from(value: PublicKey) -> Self {
-        use crate::prelude::*;
+        // use crate::prelude::*;
         let mut hasher = crypt::Keccak256::default();
         hasher.update(&<[u8; 65]>::from(value)[1..]);
         let bytes32: [u8; 32] = hasher.finalize().into();
@@ -70,7 +76,7 @@ impl std::str::FromStr for PublicKey {
             return Err(());
         }
         let s = s.strip_prefix("0x").ok_or(())?;
-        let h = super::from_hex(s).ok_or(())?;
+        let h = from_hex(s).ok_or(())?;
         h.try_into().map_err(|_| ())
     }
 }

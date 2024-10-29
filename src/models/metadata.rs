@@ -1,4 +1,5 @@
-use super::super::{hash::Hash, timestamp::Timestamp};
+
+use crate::models::{hash::Hash, timestamp::Timestamp};
 
 // todo! remove, this is an abomination
 #[doc(hidden)]
@@ -27,7 +28,7 @@ fn opt_hash_ser<S: serde::Serializer>(
 }
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
-/// Contains context information for this revision 
+/// Contains context information for this revision
 pub struct RevisionMetadata {
     pub domain_id: String,
     pub time_stamp: Timestamp,

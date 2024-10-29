@@ -1,3 +1,10 @@
+use ethaddr::Address;
+
+use crate::models::stack_str::{StackStr, from_hex};
+use crate::models::hash::Hash;
+
+use super::public_key::PublicKey;
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 /// Represents a sp256k1 public key that has been used to sign an Aqua-Chain
 pub struct Signature {
@@ -12,7 +19,7 @@ impl std::fmt::Debug for Signature {
 }
 
 impl Signature {
-    pub fn to_stackstr(self) -> super::StackStr<{ 2 + 2 * 65 }> {
+    pub fn to_stackstr(self) -> StackStr<{ 2 + 2 * 65 }> {
         let mut s = [0u8; 2 + 2 * 65];
         s[0] = b'0';
         s[1] = b'x';
@@ -21,7 +28,7 @@ impl Signature {
         unsafe {
             hex::encode_to_slice(arr, &mut s[2..]).unwrap_unchecked();
         }
-        super::StackStr(s)
+        StackStr::new(s)
     }
 }
 
@@ -86,7 +93,7 @@ impl std::str::FromStr for Signature {
             return Err(ReadError::NotAsciiLower);
         }
         let s = s.strip_prefix("0x").ok_or(ReadError::NoPrefix)?;
-        let h = super::from_hex(s).ok_or(ReadError::NotHex)?;
+        let h = from_hex(s).ok_or(ReadError::NotHex)?;
         h.try_into().map_err(ReadError::DecryptFail)
     }
 }
@@ -115,8 +122,18 @@ impl serde::Serialize for Signature {
         unsafe {
             hex::encode_to_slice(arr, &mut s[2..]).unwrap_unchecked();
         }
-        serializer.serialize_str(super::StackStr(s).as_ref())
+        serializer.serialize_str(StackStr::new(s).as_ref())
     }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+/// Represents a sp256k1 public key that has been used to sign an Aqua-Chain
+pub struct RevisionSignature {
+    pub signature: Signature,
+    pub public_key: PublicKey,
+    pub signature_hash: Hash,
+    // todo: remove with v1.2
+    pub wallet_address: Address,
 }
 
 #[test]

@@ -1,6 +1,8 @@
+
+use crate::models::stack_str::{StackStr, from_hex};
 #[derive(Hash, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 /// Used to represent Hashes
-pub struct Hash(crypt::Hash);
+pub struct Hash(crate::crypt::Hash);
 
 impl core::fmt::Debug for Hash {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -10,13 +12,14 @@ impl core::fmt::Debug for Hash {
 }
 
 impl Hash {
-    pub fn to_stackstr(self) -> super::StackStr<128> {
+    pub fn to_stackstr(self) -> StackStr<128> {
         let mut arr = [0; 128];
         // Safety: data is exactly the right size for the hex output
         unsafe {
             hex::encode_to_slice(self.0, &mut arr[..]).unwrap_unchecked();
         }
-        super::StackStr(arr)
+        // StackStr(arr)
+        StackStr::new(arr)
     }
 }
 
@@ -25,7 +28,7 @@ impl std::str::FromStr for Hash {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Hash(super::from_hex(s).ok_or(())?.into()))
+        Ok(Hash(from_hex(s).ok_or(())?.into()))
     }
 }
 
@@ -41,7 +44,7 @@ impl std::fmt::Display for Hash {
         unsafe {
             hex::encode_to_slice(<[u8; 64]>::from(self.0), &mut data).unwrap_unchecked();
         }
-        f.write_str(super::StackStr(data).as_ref())
+        f.write_str(StackStr::new(data).as_ref())
     }
 }
 

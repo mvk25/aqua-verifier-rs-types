@@ -1,7 +1,9 @@
-use crate::prelude::Revision;
-use serde::{Deserialize, Serialize};
-
 use super::hash::Hash;
+use crate::models::revision::Revision;
+use serde::{Deserialize, Serialize};
+// use serde_with::serde_as;
+// use serde_with::{formats::tuple_list};
+// use serde_with::{DisplayFromStr, formats::};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct NameSpace {
@@ -25,6 +27,8 @@ pub struct HashChain {
     pub title: String,
     pub namespace: u64,
     pub chain_height: u64,
-    #[serde(with = "tuple_vec_map")]
+    // #[serde(with = "tuple_vec_map")]
+    // #[serde_as(as = "Vec<(_, _)>")]
+    // #[serde(with = "tuple_list")]
     pub revisions: Vec<(Hash, Revision)>,
 }
