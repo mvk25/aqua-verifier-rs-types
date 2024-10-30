@@ -14,6 +14,9 @@ pub mod models {
     pub mod page_data;
     pub mod revision;
 
+    pub mod storage;
+    pub mod branch;
+
     // Tests
     pub mod tests;
 }
