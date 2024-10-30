@@ -9,7 +9,7 @@ pub struct RevisionWitness {
     pub merkle_root: Hash,
     pub witness_network: String,
     pub witness_event_transaction_hash: TxHash,
-    pub witness_event_verification_hash: TxHash,
+    pub witness_event_verification_hash: Hash,
     pub witness_hash: Hash,
     pub structured_merkle_proof: Vec<MerkleNode>,
 }
