@@ -27,8 +27,8 @@ pub struct HashChain {
     pub title: String,
     pub namespace: u64,
     pub chain_height: u64,
-    // #[serde(with = "tuple_vec_map")]
     // #[serde_as(as = "Vec<(_, _)>")]
     // #[serde(with = "tuple_list")]
+    #[serde(with = "tuple_vec_map")]
     pub revisions: Vec<(Hash, Revision)>,
 }
