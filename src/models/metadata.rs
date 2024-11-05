@@ -37,6 +37,7 @@ pub struct RevisionMetadata {
     pub previous_verification_hash: Option<Hash>,
     pub metadata_hash: Hash,
     pub verification_hash: Hash,
+    pub merge_hash : Option<Hash>
 }
 
 // this is hopefully temporary. revisions do not have verification_hash on export.
