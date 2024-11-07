@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+// use std::collections::BTreeMap;
 use crate::models::hash::Hash;
 use crate::models::base64::Base64;
 
@@ -10,9 +10,15 @@ pub struct RevisionContent {
     pub file: Option<FileContent>,
     /// (key, value) map for the content `revision` -> `content`->`content` in JSON file.\
     /// Keys (i.e. `main`, `transclusion_hashes`) need to be sorted, thus using a [`BTreeMap`]
-    pub content: BTreeMap<String, String>,
+    pub content: RevisionContentContent, // BTreeMap<String, String>,
     /// Value of `content_hash` key of a revision in JSON file 
     pub content_hash: Hash,
+   
+}
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
+/// The user visible content
+pub struct RevisionContentContent {
+    pub file_hash: Hash,
 }
 
 /// The content of the file
