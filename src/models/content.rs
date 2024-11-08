@@ -4,9 +4,9 @@ use crate::models::hash::Hash;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct RevisionContentSignature {
-    filename: String,
-    signature: String,
-    wallet_address: String,
+  pub  filename: String,
+  pub  signature: String,
+  pub  wallet_address: String,
 }
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
