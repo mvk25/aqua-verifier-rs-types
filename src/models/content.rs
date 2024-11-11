@@ -3,6 +3,14 @@ use crate::models::base64::Base64;
 use crate::models::hash::Hash;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
+pub struct RevisionWitnessInput{
+  pub  filename: String,
+  pub  tx_hash: String,
+  pub  wallet_address: String,
+  pub network: String,
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct RevisionContentSignature {
   pub  filename: String,
   pub  publickey: String,
