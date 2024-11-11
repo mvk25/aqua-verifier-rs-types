@@ -5,6 +5,7 @@ use crate::models::hash::Hash;
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct RevisionContentSignature {
   pub  filename: String,
+  pub  publickey: String,
   pub  signature: String,
   pub  wallet_address: String,
 }
