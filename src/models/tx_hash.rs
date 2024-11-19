@@ -102,7 +102,12 @@ impl serde::Serialize for TxHash {
     where
         S: serde::Serializer,
     {
-        serializer.serialize_str(&hex::encode(&self.0[..]))
+        // serializer.serialize_str(&hex::encode(&self.0[..]))
+        
+        let mut hex_str = String::with_capacity(66); // 2 for "0x" + 64 for the hash
+        hex_str.push_str("0x");
+        hex_str.push_str(&hex::encode(&self.0[..]));
+        serializer.serialize_str(&hex_str)
     }
 }
 
