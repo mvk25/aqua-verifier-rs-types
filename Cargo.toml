@@ -3,7 +3,6 @@ name = "aqua-verifier-rs-types"
 authors=["dalmasonto<https://github.com/dalmasonto>","Arthur-Kamau<https://github.com/Arthur-Kamau>" ]
 version = "1.2.0"
 edition = "2021"
-license = "GNU"
 license-file = "LICENCE"
 description = "Aqua protocol data types and basic utility types."
 readme = "README.md" 
