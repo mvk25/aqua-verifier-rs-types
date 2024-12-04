@@ -1,7 +1,21 @@
 [package]
 name = "aqua-verifier-rs-types"
-version = "0.1.0"
+authors=["dalmasonto<https://github.com/dalmasonto>","Arthur-Kamau<https://github.com/Arthur-Kamau>" ]
+version = "1.2.0"
 edition = "2021"
+license = "GNU"
+license-file = "LICENCE"
+description = "Aqua protocol data types and basic utility types."
+readme = "README.md" 
+keywords = ["aqua", "aqua-protocol"] # Keywords for crates.io search
+categories = ["development-tools", "command-line-utilities"] # Categories on crates.io
+repository = "https://github.com/inblockio/aqua-verifier-rs-types"      # Source repository
+homepage = "https://github.com/inblockio/aqua-verifier-rs-types"                   # Project homepage
+documentation = "https://docs.rs/aqua-verifier-rs-types"                   # Documentation URL
+exclude = ["target", "*.lock", ".vscode", ".idea"]    # Files or directories to exclude from the package
+
+
+
 
 [dependencies]
 sha3 = "0.10.8"

@@ -34,7 +34,7 @@ dependencies = [
 
 [[package]]
 name = "aqua-verifier-rs-types"
-version = "0.1.0"
+version = "1.2.0"
 dependencies = [
  "base64 0.22.1",
  "chrono",
