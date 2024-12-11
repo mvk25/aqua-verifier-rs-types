@@ -17,23 +17,33 @@ use crate::models::witness::RevisionWitness;
 //     witness::{RevisionWitness, MerkleNode};
 // }
 
+/// A revision of a document on an Aqua chain.
+/// The Revision struct integrates submodules like content, metadata,
+/// signature and witness to define comprehensive document revisions.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
-/// A revision of a document on an Aqua chain
 pub struct Revision {
+    /// The content of the revision.
     pub content: content::RevisionContent,
+    /// Metadata associated with the revision.
     pub metadata: metadata::RevisionMetadata,
+    /// Optional signature of the revision.
     pub signature: Option<signature::RevisionSignature>,
+    /// Optional witness data for the revision.
     pub witness: Option<witness::RevisionWitness>,
 }
 
+/// A reference to a specific revision.
 #[derive(serde::Deserialize, serde::Serialize, Debug)]
 pub struct RevisionReference {
+    /// The reference to the hash of the revision.
     pub reference_hash: Hash,
+    /// The verification of the revision.
     pub verification_hash: Hash,
+    /// Optional signature of the referenced revision.
     pub signature: Option<RevisionSignature>,
+    /// Optional witness data of the referenced version.
     pub witness: Option<RevisionWitness>,
 }
-
 
 #[test]
 fn parse_revision_future() {

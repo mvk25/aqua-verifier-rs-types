@@ -1,3 +1,5 @@
+//! # Branch - revisions with the same `genesis_hash`
+
 use crate::models::hash::Hash;
 
 /// Represents a branch - revisions with the same `genesis_hash`

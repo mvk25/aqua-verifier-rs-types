@@ -1,13 +1,22 @@
+//! # Base 64 encoded data
+
 #[derive(Debug, Clone)]
-/// Represents base64 encoded arbitrary data
+/// A wrapper type for a `Vec<u8>` that represents Base64-encoded data
+/// 
+/// The `Base64` struct is designed to encapsulate a vector of bytes
+/// and provide addition functionality, such as implementing traits
+/// for interoperability and convenience
 pub struct Base64(Vec<u8>);
 
+/// Implements the `AsRef<[u8]> trait for `Base64`. Using the
+/// AsRef trait to get a reference to the inner byte slice.
 impl AsRef<[u8]> for Base64 {
     fn as_ref(&self) -> &[u8] {
         &self.0
     }
 }
 
+/// Allows `Base64` to be dereferenced into a slice of bytes(`[u8]`)
 impl std::ops::Deref for Base64 {
     type Target = [u8];
 
@@ -16,11 +25,15 @@ impl std::ops::Deref for Base64 {
     }
 }
 
+/// Conversion from a vector of bytes into the `Base64` struct`.
 impl From<Vec<u8>> for Base64 {
     fn from(value: Vec<u8>) -> Self {
         Base64(value)
     }
 }
+
+// Into<Base64> for Vec<u8> (blanket impl)
+/// Conversion from a `Base64` Struct to a Vector of `u8`.
 impl From<Base64> for Vec<u8> {
     fn from(value: Base64) -> Self {
         value.0
@@ -41,6 +54,7 @@ impl From<Base64> for Vec<u8> {
 // }
 
 impl std::fmt::Display for Base64 {
+    /// Formats the bytes as a base64 string with the standard encoding.
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let disp = base64::display::Base64Display::new(
             &self.0,
@@ -54,6 +68,10 @@ impl std::str::FromStr for Base64 {
     //todo: err
     type Err = ();
 
+    /// Attempts to decode a base64 string into bytes
+    /// 
+    /// # Errors
+    /// Returns `Err(())` if the input is not a valid base64
     fn from_str(value: &str) -> Result<Self, Self::Err> {
         let Ok(vec) = base64::Engine::decode(&base64::engine::general_purpose::STANDARD, value)
         else {
@@ -65,6 +83,7 @@ impl std::str::FromStr for Base64 {
 }
 
 impl<'de> serde::Deserialize<'de> for Base64 {
+    /// Deserialized a Base64 encoded string into a `Base64` struct.
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -76,6 +95,7 @@ impl<'de> serde::Deserialize<'de> for Base64 {
 }
 
 impl serde::Serialize for Base64 {
+    /// Serialized the `Base64` struct as a Base64-encoded string.
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,

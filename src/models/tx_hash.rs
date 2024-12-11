@@ -1,15 +1,36 @@
+//! Defines the `TxHash` struct, which represents a transaction hash as a 32-byte array.
+
+
 use super::stack_str::{from_hex, StackStr};
 
+/// Represents a transaction hash as a 32-byte array.
+///
+/// # Traits
+/// - Implements common traits like `Hash`, `Debug`, `Clone`, `Copy`, `Default`, `PartialEq`, `Eq`, `PartialOrd`, and `Ord`.
+/// - Implements conversions, formatting, and parsing for transaction hashes.
+///
+/// # Example
+/// ```rust
+/// use std::str::FromStr;
+///
+/// let tx_hash: TxHash = TxHash::from_str("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").unwrap();
+/// println!("{}", tx_hash);
+/// ```
 #[derive(Hash, Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
-/// A transaction hash
 pub struct TxHash([u8; 32]);
 
 impl TxHash {
+    /// Converts the `TxHash` to a `StackStr` with a hexadecimal representation.
+    ///
+    /// # Returns
+    /// - A `StackStr<66>` containing the "0x" prefix followed by the hash in hex format.
+    ///
+    /// # Safety
+    /// - Relies on `hex::encode_to_slice` to write valid hex data.
     pub fn to_stackstr(self) -> StackStr<66> {
         let mut data = [0u8; 2 + 32 * 2];
         data[0] = b'0';
         data[1] = b'x';
-        // Safety: data is exactly the right size for the hex output
         unsafe {
             hex::encode_to_slice(self.0, &mut data[2..]).unwrap_unchecked();
         }
@@ -33,6 +54,19 @@ impl TxHash {
 impl std::str::FromStr for TxHash {
     type Err = String;
 
+    /// Parses a hexadecimal string into a `TxHash`.
+    ///
+    /// # Parameters
+    /// - `s`: A string containing the transaction hash, with or without the "0x" prefix.
+    ///
+    /// # Returns
+    /// - `Ok(TxHash)`: If the input string is a valid 64-character hex string.
+    /// - `Err(String)`: If the input string is invalid or of incorrect length.
+    ///
+    /// # Errors
+    /// - `"HASH HAS NO '0x' PREFIX"`: If the input lacks the "0x" prefix.
+    /// - `"LENGTH NOT EQUAL TO 64"`: If the hex string is not exactly 64 characters.
+    /// - `"UNABLE TO DECODE"`: If the hex string cannot be decoded.
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = if s.starts_with("0x") {
             // If the string starts with "0x", just use it as is
@@ -63,6 +97,7 @@ impl std::str::FromStr for TxHash {
 }
 
 impl std::fmt::Display for TxHash {
+    /// Formats the `TxHash` as a string with a "0x" prefix.
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(&self.to_stackstr())
     }
@@ -70,23 +105,34 @@ impl std::fmt::Display for TxHash {
 
 impl std::ops::Deref for TxHash {
     type Target = [u8; 32];
+    /// Provides access to the inner byte array of the `TxHash`.
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
 impl From<[u8; 32]> for TxHash {
+    /// Converts a 32-byte array into a `TxHash`.
     fn from(value: [u8; 32]) -> Self {
         Self(value)
     }
 }
 impl From<TxHash> for [u8; 32] {
+    /// Converts a `TxHash` back into a 32-byte array.
     fn from(val: TxHash) -> Self {
         val.0
     }
 }
 
 impl<'de> serde::Deserialize<'de> for TxHash {
+    /// Deserializes a transaction hash from a string.
+    ///
+    /// # Parameters
+    /// - `deserializer`: A Serde deserializer instance.
+    ///
+    /// # Returns
+    /// - `Ok(TxHash)`: If the string is valid and can be parsed.
+    /// - `Err`: If the string is invalid or cannot be parsed.
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -98,6 +144,13 @@ impl<'de> serde::Deserialize<'de> for TxHash {
 }
 
 impl serde::Serialize for TxHash {
+    /// Serializes a transaction hash to a string with a "0x" prefix.
+    ///
+    /// # Parameters
+    /// - `serializer`: A Serde serializer instance.
+    ///
+    /// # Returns
+    /// - The serialized string.
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,

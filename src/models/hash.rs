@@ -1,7 +1,15 @@
+//! Hash module defines the `Hash` struct, which wraps a cryptographic hash value and provides utility methods for serialization, deserialization, and type conversions.
+
 
 use crate::models::stack_str::{StackStr, from_hex};
+
+
+// Represents a cryptographic hash, specifically a SHA-3 512-bit hash.
+/// 
+/// The `Hash` struct wraps a cryptographic hash value and provides utility
+/// methods for serialization, deserialization, formatting and conversion
+/// to and from other types.
 #[derive(Hash, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
-/// Used to represent Hashes
 pub struct Hash(crate::crypt::Hash);
 
 impl core::fmt::Debug for Hash {
@@ -12,6 +20,11 @@ impl core::fmt::Debug for Hash {
 }
 
 impl Hash {
+    /// Converts the `Hash` into a `StackStr<128>` containing the hex-encoded hash.
+    /// 
+    /// # Safety
+    /// This method assumes that the `hex::encode_to_slice` function always succeeds
+    /// because the provided buffer is sized correctly.
     pub fn to_stackstr(self) -> StackStr<128> {
         let mut arr = [0; 128];
         // Safety: data is exactly the right size for the hex output
@@ -23,20 +36,25 @@ impl Hash {
     }
 }
 
+
 impl std::str::FromStr for Hash {
     // todo: err
+    /// Error type for failing parsing, represented as ().
     type Err = ();
 
+    /// Parses the hex string into a `Hash`.
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Hash(from_hex(s).ok_or(())?.into()))
     }
 }
 
 impl From<[u8; 64]> for Hash {
+    /// Converts a byte array of length 64 into a `Hash`.
     fn from(value: [u8; 64]) -> Self {
         crate::crypt::Hash::from(value).into()
     }
 }
+
 impl std::fmt::Display for Hash {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut data = [0u8; 64 * 2];
@@ -48,13 +66,30 @@ impl std::fmt::Display for Hash {
     }
 }
 
+/// Implements the `std::ops::Deref` trait for `Hash`.
+/// This allows `Hash` to be treated as a reference to `crate::crypt::Hash`.
 impl std::ops::Deref for Hash {
+    /// The target type that `Hash` dereferences to.
     type Target = crate::crypt::Hash;
+
+    /// Dereferences `Hash` to access the inner `crate::crypt::Hash`.
+    /// 
+    /// # Returns
+    /// A reference to the inner `crate::crypt::Hash`.
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
+
+/// Converts a `crate::crypt::Hash` into a `Hash`.
 impl From<crate::crypt::Hash> for Hash {
+    /// Performs the conversion by wrapping the `crate::crypt::Hash` into `Hash`.
+    ///
+    /// # Parameters
+    /// - `value`: The `crate::crypt::Hash` to be converted.
+    ///
+    /// # Returns
+    /// A new `Hash` instance containing the given `crate::crypt::Hash`.
     fn from(value: crate::crypt::Hash) -> Self {
         Self(value)
     }
@@ -65,13 +100,35 @@ impl From<crate::crypt::Hash> for Hash {
 //         Into::<crate::crypt::Hash>::into(value).into()
 //     }
 // }
+
+/// Converts a `Hash` into a `crate::crypt::Hash`.
 impl From<Hash> for crate::crypt::Hash {
+    /// Extracts the inner `crate::crypt::Hash` from the `Hash`.
+    ///
+    /// # Parameters
+    /// - `val`: The `Hash` instance to be converted.
+    ///
+    /// # Returns
+    /// The inner `crate::crypt::Hash`.
     fn from(val: Hash) -> Self {
         val.0
     }
 }
 
+/// Implements `serde::Deserialize` for `Hash`.
+/// This allows a `Hash` to be deserialized from a string representation.
 impl<'de> serde::Deserialize<'de> for Hash {
+    /// Deserializes a `Hash` from a string.
+    ///
+    /// # Parameters
+    /// - `deserializer`: The deserializer instance.
+    ///
+    /// # Returns
+    /// - `Ok(Hash)` if the string is successfully parsed as a valid `sha3_512` hash.
+    /// - `Err(D::Error)` if the string is invalid.
+    ///
+    /// # Errors
+    /// Returns a custom error if the string is not a valid `sha3_512` hash.
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -82,7 +139,20 @@ impl<'de> serde::Deserialize<'de> for Hash {
     }
 }
 
+/// Implements `serde::Serialize` for `Hash`.
+/// This allows a `Hash` to be serialized as a hexadecimal string.
 impl serde::Serialize for Hash {
+    /// Serializes the `Hash` into a hexadecimal string.
+    ///
+    /// # Parameters
+    /// - `serializer`: The serializer instance.
+    ///
+    /// # Returns
+    /// - `Ok(S::Ok)` if serialization succeeds.
+    /// - `Err(S::Error)` if serialization fails.
+    ///
+    /// # Example
+    /// Converts the inner hash into a hexadecimal string and serializes it.
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,

@@ -1,3 +1,4 @@
+//! It defines structures related to revision metadata, including `ExportRevisionMetadata` for export context and `RevisionMetadata` for revision-specific context.
 
 use crate::models::{hash::Hash, timestamp::Timestamp};
 

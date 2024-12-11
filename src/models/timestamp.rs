@@ -1,7 +1,12 @@
+//! Provides the `Timestamp` struct for working with `chrono::NaiveDateTime` and the `format_timestamp` function for formatting and parsing timestamps.
+
+
 const FORMAT: &str = "%Y%m%d%H%M%S";
 
+/// A wrapper for `chrono::NaiveDateTime` to handle timestamp formatting and parsing.
+///
+/// Timestamps are serialized and deserialized using the format `"%Y%m%d%H%M%S"`.
 #[derive(Debug, Clone, Default)]
-/// Used to check for witness events.
 pub struct Timestamp(chrono::NaiveDateTime);
 
 impl From<chrono::NaiveDateTime> for Timestamp {
